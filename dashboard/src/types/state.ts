@@ -48,12 +48,19 @@ export interface SquadState {
 }
 
 // Squad metadata from squad.yaml
+export interface SquadAgentInfo {
+  id: string;
+  name: string;
+  icon: string;
+  gender?: "male" | "female";
+}
+
 export interface SquadInfo {
   code: string;
   name: string;
   description: string;
   icon: string;
-  agents: string[]; // agent file paths
+  agents: SquadAgentInfo[]; // the squad's real roster (from squad.yaml)
 }
 
 // ── Run events ────────────────────────────────────────────────────────────

@@ -8,8 +8,8 @@ icon: "🐞"
 version: "1.0.0"
 created: "2026-06-25"
 mode: "alta-performance"
-company: "_opensquad/_memory/company.md"
-preferences: "_opensquad/_memory/preferences.md"
+company: "_codesquad/_memory/company.md"
+preferences: "_codesquad/_memory/preferences.md"
 domain: "software-development"
 skills: [github, run-tests, git-workflow]
 data:
@@ -17,14 +17,17 @@ data:
 agents:
   - id: reproducer
     name: "Rafa Repro"
+    gender: "male"
     icon: "🔁"
     custom: agents/reproducer.custom.md
   - id: fixer
     name: "Fábio Fix"
+    gender: "male"
     icon: "🩹"
     custom: agents/fixer.custom.md
   - id: verifier
     name: "Vera Verde"
+    gender: "female"
     icon: "✅"
     custom: agents/verifier.custom.md
 pipeline:

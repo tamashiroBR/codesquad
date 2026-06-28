@@ -29,6 +29,8 @@ Exemplo (o squad **feature-builder**):
 
 Cada squad já vem com agentes, pipeline, gates e arquivos de dados (convenções do repo, rubrica de revisão, catálogo de refactor). Use como estão ou edite com `/codesquad edit <nome>`.
 
+Todos são instalados pelo `npx codesquad-ai init`. Para gerenciá-los pelo terminal: `npx codesquad-ai squads` (lista os instalados e os disponíveis), `npx codesquad-ai squads install <nome>` (adiciona um) e `npx codesquad-ai squads remove <nome>` (remove um).
+
 ## Para quem?
 
 Para quem escreve, mantém ou revisa software e quer automatizar o trabalho repetitivo de engenharia com agentes — sem abrir mão do controle humano nos pontos que importam.
@@ -56,6 +58,8 @@ Para quem escreve, mantém ou revisa software e quer automatizar o trabalho repe
 ```bash
 npx codesquad-ai init
 ```
+
+Funciona tanto num projeto novo quanto **num projeto já existente** — o comando adiciona o `_codesquad/`, os squads, o dashboard e os arquivos da sua IDE na pasta atual, sem tocar no seu código. Os quatro squads inclusos são instalados automaticamente; para adicionar ou remover um depois, use `npx codesquad-ai squads install <nome>` (veja [Comandos](#comandos)).
 
 > **Nota:** rode sua IDE de IA de dentro do diretório do projeto onde você executou `npx codesquad-ai init`. O comando `/codesquad` só fica disponível quando a IDE é aberta nessa pasta.
 
@@ -150,6 +154,21 @@ O squad executa automaticamente, pausando nos checkpoints onde o agente pede sua
 | `/codesquad skills` | Navega pelas skills instaladas |
 | `/codesquad install <nome>` | Instala uma skill do catálogo |
 | `/codesquad uninstall <nome>` | Remove uma skill instalada |
+
+Esses são os comandos **dentro da IDE**. No **terminal**, a CLI `npx codesquad-ai` cuida da instalação e do gerenciamento:
+
+| Comando (terminal) | O que faz |
+|--------------------|-----------|
+| `npx codesquad-ai init` | Instala o codesquad no projeto atual (novo **ou** existente) |
+| `npx codesquad-ai update` | Atualiza o core |
+| `npx codesquad-ai squads` | Lista squads instalados e disponíveis |
+| `npx codesquad-ai squads install <nome>` | Instala um squad incluso (ex.: `feature-builder`) |
+| `npx codesquad-ai squads remove <nome>` | Remove um squad instalado |
+| `npx codesquad-ai install <skill>` | Instala uma skill do catálogo |
+| `npx codesquad-ai uninstall <skill>` | Remove uma skill |
+| `npx codesquad-ai skills` | Lista skills instaladas |
+| `npx codesquad-ai agents` · `agents install <nome>` | Lista / instala agentes predefinidos |
+| `npx codesquad-ai runs [squad]` | Histórico de execuções |
 
 ## Custo de Tokens
 
@@ -323,6 +342,21 @@ The squad runs automatically, pausing at checkpoints where the agent asks for yo
 | `/codesquad skills` | Browse installed skills |
 | `/codesquad install <name>` | Install a skill from catalog |
 | `/codesquad uninstall <name>` | Remove an installed skill |
+
+Those run **inside the IDE**. In the **terminal**, the `npx codesquad-ai` CLI handles install and management:
+
+| Command (terminal) | What it does |
+|--------------------|--------------|
+| `npx codesquad-ai init` | Install Codesquad into the current project (new **or** existing) |
+| `npx codesquad-ai update` | Update the core |
+| `npx codesquad-ai squads` | List installed + available squads |
+| `npx codesquad-ai squads install <name>` | Install a built-in squad (e.g. `feature-builder`) |
+| `npx codesquad-ai squads remove <name>` | Remove an installed squad |
+| `npx codesquad-ai install <skill>` | Install a skill from the catalog |
+| `npx codesquad-ai uninstall <skill>` | Remove a skill |
+| `npx codesquad-ai skills` | List installed skills |
+| `npx codesquad-ai agents` · `agents install <name>` | List / install predefined agents |
+| `npx codesquad-ai runs [squad]` | Execution history |
 
 ## Token Cost
 

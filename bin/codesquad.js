@@ -5,6 +5,7 @@ import { init } from '../src/init.js';
 import { update } from '../src/update.js';
 import { skillsCli } from '../src/skills-cli.js';
 import { agentsCli } from '../src/agents-cli.js';
+import { squadsCli } from '../src/squads-cli.js';
 import { listRuns, printRuns } from '../src/runs.js';
 
 const { positionals } = parseArgs({
@@ -46,16 +47,23 @@ if (command === 'init') {
   const args = positionals.slice(2);
   const result = await agentsCli(subcommand, args, process.cwd());
   if (!result.success) process.exitCode = 1;
+} else if (command === 'squads') {
+  // npx codesquad squads list|install <name>|remove <name>
+  const subcommand = positionals[1];
+  const args = positionals.slice(2);
+  const result = await squadsCli(subcommand, args, process.cwd());
+  if (!result.success) process.exitCode = 1;
 } else if (command === 'runs') {
   const squadName = positionals[1] || null;
   const runs = await listRuns(squadName, process.cwd());
   printRuns(runs);
 } else {
   console.log(`
-  codesquad — Multi-agent orchestration for Claude Code
+  codesquad — Multi-agent orchestration for AI coding IDEs
 
   Usage:
-    npx codesquad init                    Initialize Codesquad
+    npx codesquad init                    Install Codesquad into the current project
+                                          (works in a new OR existing project)
     npx codesquad update                  Update Codesquad core
     npx codesquad install <name>          Install a skill
     npx codesquad uninstall <name>        Remove a skill
@@ -63,9 +71,10 @@ if (command === 'init') {
     npx codesquad skills                  List installed skills
     npx codesquad agents                  List installed agents
     npx codesquad agents install <name>   Install a predefined agent
-    npx codesquad agents remove <name>    Remove an agent
-    npx codesquad agents update           Update all agents
-    npx codesquad runs [squad-name]     View execution history
+    npx codesquad squads                  List available + installed squads
+    npx codesquad squads install <name>   Install a built-in squad (e.g. feature-builder)
+    npx codesquad squads remove <name>    Remove an installed squad
+    npx codesquad runs [squad-name]       View execution history
 
   Learn more: https://github.com/tamashiroBR/codesquad
   `);

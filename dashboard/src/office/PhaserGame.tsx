@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import Phaser from 'phaser';
 import { OfficeScene } from './OfficeScene';
 import { useSquadStore } from '@/store/useSquadStore';
-import { selectDisplayState } from '@/lib/displayState';
+import { selectDisplayState, buildIdleState } from '@/lib/displayState';
 
 // Cap the backing-store multiplier: 2x already looks crisp on Retina without
 // quadrupling the pixel count on 3x phones.
@@ -77,7 +77,15 @@ export function PhaserGame() {
       const events = selected ? state.events.get(selected) : undefined;
       const display = selectDisplayState(live, events, state.replay);
 
-      scene.events.emit('stateUpdate', display);
+      // No live/replay state yet → show the squad's real roster (from squad.yaml)
+      // idle, instead of the generic demo agents.
+      let toRender = display;
+      if (!toRender && selected) {
+        const info = state.squads.get(selected);
+        if (info && info.agents.length > 0) toRender = buildIdleState(info);
+      }
+
+      scene.events.emit('stateUpdate', toRender);
     });
   }, []);
 

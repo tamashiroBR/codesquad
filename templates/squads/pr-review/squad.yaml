@@ -10,8 +10,8 @@ version: "1.0.0"
 created: "2026-06-25"
 mode: "alta-performance"
 
-company: "_opensquad/_memory/company.md"
-preferences: "_opensquad/_memory/preferences.md"
+company: "_codesquad/_memory/company.md"
+preferences: "_codesquad/_memory/preferences.md"
 memory: "_memory/memories.md"
 
 target_repo: "Set per run — the repo and PR number/URL under review"
@@ -29,16 +29,19 @@ data:
 agents:
   - id: triager
     name: "Tiago Triagem"
+    gender: "male"
     icon: "🧭"
     custom: agents/triager.custom.md
 
   - id: reviewer
     name: "Rui Revisor"
+    gender: "male"
     icon: "🔍"
     custom: agents/reviewer.custom.md
 
   - id: reporter
     name: "Rita Relato"
+    gender: "female"
     icon: "📨"
     custom: agents/reporter.custom.md
 

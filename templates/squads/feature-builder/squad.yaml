@@ -10,8 +10,8 @@ version: "1.0.0"
 created: "2026-06-25"
 mode: "alta-performance"
 
-company: "_opensquad/_memory/company.md"
-preferences: "_opensquad/_memory/preferences.md"
+company: "_codesquad/_memory/company.md"
+preferences: "_codesquad/_memory/preferences.md"
 memory: "_memory/memories.md"
 
 target_repo: "Set per run — a local path or git URL (optional codebase investigation)"
@@ -32,26 +32,31 @@ data:
 agents:
   - id: spec-writer
     name: "Sofia Spec"
+    gender: "female"
     icon: "📋"
     custom: agents/spec-writer.custom.md
 
   - id: architect
     name: "Artur Arquiteto"
+    gender: "male"
     icon: "🧠"
     custom: agents/architect.custom.md
 
   - id: coder
     name: "Caio Código"
+    gender: "male"
     icon: "⌨️"
     custom: agents/coder.custom.md
 
   - id: tester
     name: "Tânia Teste"
+    gender: "female"
     icon: "🧪"
     custom: agents/tester.custom.md
 
   - id: reviewer
     name: "Rui Revisor"
+    gender: "male"
     icon: "🔍"
     custom: agents/reviewer.custom.md
 

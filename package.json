@@ -1,6 +1,6 @@
 {
   "name": "codesquad-ai",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "Multi-agent orchestration for software teams — AI squads that spec, build, test, refactor, and review code",
   "type": "module",
   "bin": {

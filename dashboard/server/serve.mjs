@@ -51,14 +51,23 @@ async function discoverSquads(squadsDir) {
     const yamlPath = path.join(squadsDir, entry.name, "squad.yaml");
     try {
       const parsed = parseYaml(await fsp.readFile(yamlPath, "utf-8"));
-      const s = parsed?.squad;
+      const s = parsed?.squad ?? parsed;
       if (s) {
         squads.push({
           code: typeof s.code === "string" ? s.code : entry.name,
           name: typeof s.name === "string" ? s.name : entry.name,
           description: typeof s.description === "string" ? s.description : "",
           icon: typeof s.icon === "string" ? s.icon : "\u{1F4CB}",
-          agents: Array.isArray(s.agents) ? s.agents.filter((a) => typeof a === "string") : [],
+          agents: Array.isArray(s.agents)
+            ? s.agents
+                .filter((a) => a && typeof a === "object" && typeof a.id === "string")
+                .map((a) => ({
+                  id: a.id,
+                  name: typeof a.name === "string" ? a.name : a.id,
+                  icon: typeof a.icon === "string" ? a.icon : "\u{1F464}",
+                  gender: a.gender === "male" || a.gender === "female" ? a.gender : undefined,
+                }))
+            : [],
         });
         continue;
       }

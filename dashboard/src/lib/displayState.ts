@@ -1,5 +1,30 @@
-import type { SquadState, RunEvent } from "@/types/state";
+import type { SquadState, RunEvent, SquadInfo } from "@/types/state";
 import { reconstructStateAt } from "@/lib/replay";
+
+/**
+ * Build an idle snapshot from a squad's definition (squad.yaml roster), so the
+ * office shows each squad's REAL agents — correct count, role names, icons — even
+ * before a run writes a live state.json. Without this the scene falls back to a
+ * generic demo roster that's identical for every squad.
+ */
+export function buildIdleState(info: SquadInfo): SquadState {
+  return {
+    squad: info.code,
+    status: "idle",
+    step: { current: 0, total: 0, label: "" },
+    agents: info.agents.map((a) => ({
+      id: a.id,
+      name: a.name,
+      icon: a.icon,
+      gender: a.gender,
+      status: "idle" as const,
+      desk: { col: 1, row: 1 }, // renderScene auto-arranges identical desks into a grid
+    })),
+    handoff: null,
+    startedAt: null,
+    updatedAt: new Date().toISOString(),
+  };
+}
 
 /**
  * The state the UI should currently render: the live snapshot, or — when the

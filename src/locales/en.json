@@ -78,5 +78,22 @@
   "step2GeminiCli": "2. Type /codesquad to get started",
   "step1Trae": "1. Open this project in Trae",
   "step2Trae": "2. Type /codesquad in the chat to get started",
-  "tokenCostWarning": "Running squads consumes AI tokens (paid). Monitor your usage in your IDE or AI provider dashboard."
+  "tokenCostWarning": "Running squads consumes AI tokens (paid). Monitor your usage in your IDE or AI provider dashboard.",
+  "squadsNotInitialized": "Codesquad isn't initialized here. Run `npx codesquad init` first.",
+  "squadsUnknownCommand": "Unknown squads command: {cmd}",
+  "squadsError": "Error: {message}",
+  "squadsInstalledHeader": "Installed:",
+  "squadsNoneInstalled": "(none)",
+  "squadsAvailableHeader": "Available to install:",
+  "squadsInstallHint": "Install one with: npx codesquad squads install <name>",
+  "squadsInstallUsage": "Usage: npx codesquad squads install <name>",
+  "squadsRemoveUsage": "Usage: npx codesquad squads remove <name>",
+  "squadsAlreadyInstalled": "'{id}' is already installed. Reinstall and overwrite? (y/N) ",
+  "squadsConfirmRemove": "Remove squad '{id}' and its files? (y/N) ",
+  "squadsInstalling": "Installing '{id}'...",
+  "squadsInstalled": "Installed '{id}'.",
+  "squadsRemoving": "Removing '{id}'...",
+  "squadsRemoved": "Removed '{id}'.",
+  "squadsNotInstalled": "Squad '{id}' is not installed.",
+  "squadsAgentsWord": "agents"
 }

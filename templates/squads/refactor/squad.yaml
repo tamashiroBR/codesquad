@@ -10,8 +10,8 @@ version: "1.0.0"
 created: "2026-06-25"
 mode: "alta-performance"
 
-company: "_opensquad/_memory/company.md"
-preferences: "_opensquad/_memory/preferences.md"
+company: "_codesquad/_memory/company.md"
+preferences: "_codesquad/_memory/preferences.md"
 memory: "_memory/memories.md"
 
 target_repo: "Set per run — a local path or git URL (optional codebase investigation)"
@@ -30,16 +30,19 @@ data:
 agents:
   - id: mapper
     name: "Marina Mapa"
+    gender: "female"
     icon: "🗺️"
     custom: agents/mapper.custom.md
 
   - id: refactorer
     name: "Rafael Refatora"
+    gender: "male"
     icon: "🧹"
     custom: agents/refactorer.custom.md
 
   - id: verifier
     name: "Vera Verde"
+    gender: "female"
     icon: "✅"
     custom: agents/verifier.custom.md
 
