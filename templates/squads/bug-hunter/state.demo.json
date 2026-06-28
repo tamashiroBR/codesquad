@@ -1,0 +1,13 @@
+{
+  "squad": "bug-hunter",
+  "status": "running",
+  "step": { "current": 4, "total": 7, "label": "Diagnóstico" },
+  "agents": [
+    { "id": "reproducer", "name": "Rafa Repro", "icon": "🔁", "gender": "male", "status": "done", "desk": { "col": 1, "row": 1 } },
+    { "id": "fixer", "name": "Fábio Fix", "icon": "🩹", "gender": "male", "status": "working", "desk": { "col": 2, "row": 1 } },
+    { "id": "verifier", "name": "Vera Verde", "icon": "✅", "gender": "female", "status": "idle", "desk": { "col": 3, "row": 1 } }
+  ],
+  "handoff": null,
+  "startedAt": "2026-06-25T10:00:00.000Z",
+  "updatedAt": "2026-06-25T10:04:00.000Z"
+}

@@ -1,0 +1,70 @@
+name: "Pipeline — PR Reviewer"
+version: "1.0.0"
+created: "2026-06-25"
+squad: "pr-review"
+
+description: >
+  Context → Adversarial review → Verdict → (human checkpoint) → Post to GitHub. The verdict is
+  produced by a mechanical severity rule, and the review is never posted to the PR until a human
+  approves it.
+
+mode: "alta-performance"
+
+steps:
+  - id: step-01
+    name: "PR Alvo"
+    type: checkpoint
+    file: steps/step-01-intake.md
+  - id: step-02
+    name: "Contexto e Triagem"
+    type: agent
+    agent: triager
+    tasks: [gather-context]
+    file: steps/step-02-context.md
+    depends_on: step-01
+  - id: step-03
+    name: "Revisão Adversarial"
+    type: agent
+    agent: reviewer
+    tasks: [review-diff]
+    file: steps/step-03-review.md
+    depends_on: step-02
+  - id: step-04
+    name: "Veredito"
+    type: agent
+    agent: reporter
+    tasks: [verdict]
+    file: steps/step-04-verdict.md
+    depends_on: step-03
+  - id: step-05
+    name: "Aprovação para Postar"
+    type: checkpoint
+    file: steps/step-05-approve-post.md
+    depends_on: step-04
+  - id: step-06
+    name: "Postar Review no GitHub"
+    type: agent
+    agent: reporter
+    tasks: [post-review]
+    file: steps/step-06-post.md
+    depends_on: step-05
+
+checkpoints: [step-01, step-05]
+
+gates:
+  - id: verdict-rule
+    after: step-04
+    rule: >
+      Veredito por regra mecânica: qualquer BLOCKER → REQUEST CHANGES; sem blocker mas com MAJOR
+      aberto → REQUEST CHANGES; só MINOR/NIT → APPROVE. Nenhuma força média compensa um blocker.
+  - id: human-before-post
+    after: step-05
+    rule: >
+      O review só é postado no GitHub (step-06) após aprovação humana explícita no checkpoint.
+      Se o usuário recusar, output/review.md é a entrega e o pipeline encerra.
+
+output:
+  artifacts:
+    - output/pr-context.md
+    - output/findings.md
+    - output/review.md

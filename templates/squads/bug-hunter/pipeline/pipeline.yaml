@@ -1,0 +1,62 @@
+name: "Pipeline — Bug Hunter"
+version: "1.0.0"
+squad: "bug-hunter"
+description: >
+  Reproduce → diagnose root cause → fix with regression test → verify. Checkpoints gate the
+  reproduction and the diagnosis before any fix is written.
+mode: "alta-performance"
+steps:
+  - id: step-01
+    name: "Relato do Bug"
+    type: checkpoint
+    file: steps/step-01-report.md
+  - id: step-02
+    name: "Reprodução Mínima"
+    type: agent
+    agent: reproducer
+    tasks: [reproduce]
+    file: steps/step-02-reproduce.md
+    depends_on: step-01
+  - id: step-03
+    name: "Confirmação da Reprodução"
+    type: checkpoint
+    file: steps/step-03-confirm-repro.md
+    depends_on: step-02
+  - id: step-04
+    name: "Diagnóstico de Causa Raiz"
+    type: agent
+    agent: fixer
+    tasks: [diagnose]
+    file: steps/step-04-diagnose.md
+    depends_on: step-03
+  - id: step-05
+    name: "Aprovação do Diagnóstico"
+    type: checkpoint
+    file: steps/step-05-approve-diagnosis.md
+    depends_on: step-04
+  - id: step-06
+    name: "Fix + Teste de Regressão"
+    type: agent
+    agent: fixer
+    tasks: [fix]
+    file: steps/step-06-fix.md
+    depends_on: step-05
+  - id: step-07
+    name: "Verificação"
+    type: agent
+    agent: verifier
+    tasks: [verify]
+    file: steps/step-07-verify.md
+    depends_on: step-06
+checkpoints: [step-01, step-03, step-05]
+gates:
+  - id: regression-proves-fix
+    after: step-07
+    rule: >
+      O teste de regressão DEVE falhar no código antigo e passar no novo. Se não falhava
+      antes, o fix não está provado — volta ao step-04 (a causa raiz estava errada).
+output:
+  artifacts:
+    - output/reproduction.md
+    - output/root-cause.md
+    - output/fix-report.md

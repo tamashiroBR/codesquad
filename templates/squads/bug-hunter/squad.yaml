@@ -1,0 +1,32 @@
+name: "Bug Hunter"
+code: "bug-hunter"
+description: >
+  Turns a bug report into a verified fix. Reproduce → isolate root cause → fix at the cause
+  with a regression test → verify the suite is green. The fix never ships without a test that
+  fails on the old code and passes on the new.
+icon: "🐞"
+version: "1.0.0"
+created: "2026-06-25"
+mode: "alta-performance"
+company: "_opensquad/_memory/company.md"
+preferences: "_opensquad/_memory/preferences.md"
+domain: "software-development"
+skills: [github, run-tests, git-workflow]
+data:
+  - pipeline/data/repo-conventions.md
+agents:
+  - id: reproducer
+    name: "Rafa Repro"
+    icon: "🔁"
+    custom: agents/reproducer.custom.md
+  - id: fixer
+    name: "Fábio Fix"
+    icon: "🩹"
+    custom: agents/fixer.custom.md
+  - id: verifier
+    name: "Vera Verde"
+    icon: "✅"
+    custom: agents/verifier.custom.md
+pipeline:
+  entry: pipeline/pipeline.yaml
+output_dir: output/

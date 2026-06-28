@@ -1,0 +1,48 @@
+name: "PR Reviewer"
+code: "pr-review"
+description: >
+  Reviews an incoming pull request adversarially and produces a structured, severity-tagged
+  verdict — then posts it to GitHub only after a human checkpoint. Built to distrust the diff:
+  it assumes the happy path was tested and the edge cases were not, and it never approves on
+  "looks fine".
+icon: "🔍"
+version: "1.0.0"
+created: "2026-06-25"
+mode: "alta-performance"
+
+company: "_opensquad/_memory/company.md"
+preferences: "_opensquad/_memory/preferences.md"
+memory: "_memory/memories.md"
+
+target_repo: "Set per run — the repo and PR number/URL under review"
+domain: "software-development"
+performance_mode: "alta-performance"
+
+skills:
+  - github
+  - run-tests
+
+data:
+  - pipeline/data/review-rubric.md
+  - pipeline/data/repo-conventions.md
+
+agents:
+  - id: triager
+    name: "Tiago Triagem"
+    icon: "🧭"
+    custom: agents/triager.custom.md
+
+  - id: reviewer
+    name: "Rui Revisor"
+    icon: "🔍"
+    custom: agents/reviewer.custom.md
+
+  - id: reporter
+    name: "Rita Relato"
+    icon: "📨"
+    custom: agents/reporter.custom.md
+
+pipeline:
+  entry: pipeline/pipeline.yaml
+
+output_dir: output/

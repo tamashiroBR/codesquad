@@ -1,0 +1,49 @@
+name: "Refactor Crew"
+code: "refactor"
+description: >
+  Improves the structure of existing code WITHOUT changing its behavior. A safety net of
+  characterization tests is established first; the refactor then proceeds in small, reversible
+  steps with the suite green after each one. Nothing ships if behavior changed or a public
+  API moved without a recorded note.
+icon: "🧹"
+version: "1.0.0"
+created: "2026-06-25"
+mode: "alta-performance"
+
+company: "_opensquad/_memory/company.md"
+preferences: "_opensquad/_memory/preferences.md"
+memory: "_memory/memories.md"
+
+target_repo: "Set per run — a local path or git URL (optional codebase investigation)"
+domain: "software-development"
+performance_mode: "alta-performance"
+
+skills:
+  - github
+  - run-tests
+  - git-workflow
+
+data:
+  - pipeline/data/repo-conventions.md
+  - pipeline/data/refactor-catalog.md
+
+agents:
+  - id: mapper
+    name: "Marina Mapa"
+    icon: "🗺️"
+    custom: agents/mapper.custom.md
+
+  - id: refactorer
+    name: "Rafael Refatora"
+    icon: "🧹"
+    custom: agents/refactorer.custom.md
+
+  - id: verifier
+    name: "Vera Verde"
+    icon: "✅"
+    custom: agents/verifier.custom.md
+
+pipeline:
+  entry: pipeline/pipeline.yaml
+
+output_dir: output/

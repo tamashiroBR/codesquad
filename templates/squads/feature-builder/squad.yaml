@@ -1,0 +1,61 @@
+name: "Feature Builder"
+code: "feature-builder"
+description: >
+  Turns a feature request or GitHub issue into a shipped, tested, reviewed change —
+  through a five-role pipeline with human checkpoints at every decision point. The
+  reviewer structurally distrusts the coder: nothing reaches a PR until a spec is
+  approved, tests are green, and an adversarial review passes.
+icon: "🛠️"
+version: "1.0.0"
+created: "2026-06-25"
+mode: "alta-performance"
+
+company: "_opensquad/_memory/company.md"
+preferences: "_opensquad/_memory/preferences.md"
+memory: "_memory/memories.md"
+
+target_repo: "Set per run — a local path or git URL (optional codebase investigation)"
+domain: "software-development"
+performance_mode: "alta-performance"
+
+skills:
+  - github
+  - run-tests
+  - git-workflow
+
+data:
+  - pipeline/data/repo-conventions.md
+  - pipeline/data/definition-of-done.md
+  - pipeline/data/review-rubric.md
+  - pipeline/data/anti-patterns.md
+
+agents:
+  - id: spec-writer
+    name: "Sofia Spec"
+    icon: "📋"
+    custom: agents/spec-writer.custom.md
+
+  - id: architect
+    name: "Artur Arquiteto"
+    icon: "🧠"
+    custom: agents/architect.custom.md
+
+  - id: coder
+    name: "Caio Código"
+    icon: "⌨️"
+    custom: agents/coder.custom.md
+
+  - id: tester
+    name: "Tânia Teste"
+    icon: "🧪"
+    custom: agents/tester.custom.md
+
+  - id: reviewer
+    name: "Rui Revisor"
+    icon: "🔍"
+    custom: agents/reviewer.custom.md
+
+pipeline:
+  entry: pipeline/pipeline.yaml
+
+output_dir: output/

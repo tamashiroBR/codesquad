@@ -1,0 +1,77 @@
+# Best Practices Catalog — Software Development Edition
+# The Architect reads this file to discover which best-practices are available.
+# Read the full file only for best-practices relevant to the squad being created.
+
+catalog:
+  # === Engineering Disciplines ===
+  - id: requirements
+    name: "Requirements & Specification"
+    whenToUse: "Creating agents that turn a feature request or bug report into a clear spec — scope, acceptance criteria, edge cases, and out-of-scope boundaries — before any code is written."
+    file: requirements.md
+
+  - id: code-architecture
+    name: "Software Architecture & Design"
+    whenToUse: "Creating agents that design module boundaries, data flow, and interfaces; choose patterns; or write Architecture Decision Records before implementation."
+    file: code-architecture.md
+
+  - id: code-review
+    name: "Code Review & Change Control"
+    whenToUse: "Creating agents that review diffs/PRs, classify issues by severity, and produce a structured APPROVE / REQUEST CHANGES verdict. The reviewer must structurally distrust the implementer."
+    file: code-review.md
+
+  - id: testing
+    name: "Testing & Verification"
+    whenToUse: "Creating agents that design test strategy, write unit/integration/e2e tests, drive TDD, or verify that an implementation actually meets its acceptance criteria."
+    file: testing.md
+
+  - id: debugging
+    name: "Debugging & Root-Cause Analysis"
+    whenToUse: "Creating agents that reproduce a bug, isolate it, find the true root cause (not the symptom), fix it, and add a regression test that fails before the fix and passes after."
+    file: debugging.md
+
+  - id: refactoring
+    name: "Refactoring & Code Health"
+    whenToUse: "Creating agents that improve code structure without changing behavior — extracting functions, removing duplication, reducing complexity — in small, test-backed steps."
+    file: refactoring.md
+
+  - id: api-design
+    name: "API & Interface Design"
+    whenToUse: "Creating agents that design HTTP/RPC APIs, library interfaces, or data contracts — covering resource modeling, versioning, error semantics, and backward compatibility."
+    file: api-design.md
+
+  - id: security-review
+    name: "Security Review"
+    whenToUse: "Creating agents that review code/changes for security issues — injection, authn/authz, secrets handling, dependency risk — against a practical OWASP-style checklist."
+    file: security-review.md
+
+  - id: devops-ci
+    name: "DevOps & CI/CD"
+    whenToUse: "Creating agents that design or audit build/test/deploy pipelines, define CI gates, or set up release and rollback procedures."
+    file: devops-ci.md
+
+  # === Cross-Cutting ===
+  - id: researching
+    name: "Technical Research & Investigation"
+    whenToUse: "Creating agents that research libraries, compare approaches, read docs/RFCs, or produce a structured technical brief before a decision is made."
+    file: researching.md
+
+  - id: technical-writing
+    name: "Technical Writing & Documentation"
+    whenToUse: "Creating agents that write READMEs, API docs, runbooks, migration guides, ADRs, or changelogs — documentation that a developer can act on."
+    file: technical-writing.md
+
+  # === Stack Conventions (layer on top of the disciplines for a specific target stack) ===
+  - id: java
+    name: "Java & JVM Conventions"
+    whenToUse: "Creating agents that build or review Java/Kotlin on the JVM (Spring Boot, Jakarta) — immutability, null/exception discipline, DI, layering, and Maven/Gradle gates."
+    file: java.md
+
+  - id: react
+    name: "React (Web) Conventions"
+    whenToUse: "Creating agents that build or review React web apps (Vite, Next.js, Remix) — hooks rules, derived state, effect discipline, keys, and React Testing Library."
+    file: react.md
+
+  - id: react-native
+    name: "React Native Conventions"
+    whenToUse: "Creating agents that build or review React Native mobile apps (Expo or bare) — core components vs the web, platform differences, FlatList performance, JS-thread care, and the Jest unit gate vs the native build."
+    file: react-native.md

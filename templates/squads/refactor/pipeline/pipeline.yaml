@@ -1,0 +1,65 @@
+name: "Pipeline — Refactor Crew"
+version: "1.0.0"
+created: "2026-06-25"
+squad: "refactor"
+
+description: >
+  Target → Safety Net → Plan → Refactor in small steps → Verify behavior preserved.
+  The safety net (green characterization tests) is a hard gate: no transformation happens
+  before behavior is pinned, and the suite must stay green after every step.
+
+mode: "alta-performance"
+
+steps:
+  - id: step-01
+    name: "Alvo do Refactor"
+    type: checkpoint
+    file: steps/step-01-target.md
+  - id: step-02
+    name: "Mapa + Rede de Segurança"
+    type: agent
+    agent: mapper
+    tasks: [map-target, safety-net]
+    file: steps/step-02-map.md
+    depends_on: step-01
+  - id: step-03
+    name: "Aprovação do Plano"
+    type: checkpoint
+    file: steps/step-03-approve-plan.md
+    depends_on: step-02
+  - id: step-04
+    name: "Refactor em Passos Pequenos"
+    type: agent
+    agent: refactorer
+    tasks: [refactor-steps]
+    file: steps/step-04-refactor.md
+    depends_on: step-03
+  - id: step-05
+    name: "Verificação de Comportamento"
+    type: agent
+    agent: verifier
+    tasks: [verify-behavior]
+    file: steps/step-05-verify.md
+    depends_on: step-04
+
+checkpoints: [step-01, step-03]
+
+gates:
+  - id: safety-net-green
+    after: step-02
+    rule: >
+      O pipeline NÃO avança para o plano/refactor se a rede de segurança estiver vermelha ou
+      ausente para o alvo. Sem testes que provem o comportamento atual, não há refactor seguro.
+  - id: behavior-preserved
+    after: step-05
+    rule: >
+      Suíte verde + testes de caracterização inalterados + nenhuma API pública movida sem nota
+      → APPROVE. Qualquer falha (vermelho, teste afrouxado, comportamento mudou) retorna ao
+      refactorer (step-04). Máximo de 3 ciclos antes de escalar ao usuário.
+
+output:
+  artifacts:
+    - output/target.md
+    - output/safety-net.md
+    - output/refactor-plan.md
+    - output/refactor-report.md

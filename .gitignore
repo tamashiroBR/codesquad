@@ -1,0 +1,15 @@
+node_modules/
+.env
+*.log
+squads/*/
+_codesquad/_memory/company.md
+_codesquad/_memory/preferences.md
+_codesquad/_browser_profile/
+docs/
+.superpowers/
+temp/
+tests/
+test-results/
+temp/squads/
+.claude/settings.local.json
+dashboards/test-results/
