@@ -1,5 +1,5 @@
 {
-  "name": "codesquad",
+  "name": "@tamashirobr/codesquad",
   "version": "0.1.15",
   "description": "Multi-agent orchestration for software teams — AI squads that spec, build, test, refactor, and review code",
   "type": "module",
