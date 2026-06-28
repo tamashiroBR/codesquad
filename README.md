@@ -54,15 +54,15 @@ Para quem escreve, mantém ou revisa software e quer automatizar o trabalho repe
 **Pré-requisito:** Node.js 20+
 
 ```bash
-npx codesquad init
+npx codesquad-ai init
 ```
 
-> **Nota:** rode sua IDE de IA de dentro do diretório do projeto onde você executou `npx codesquad init`. O comando `/codesquad` só fica disponível quando a IDE é aberta nessa pasta.
+> **Nota:** rode sua IDE de IA de dentro do diretório do projeto onde você executou `npx codesquad-ai init`. O comando `/codesquad` só fica disponível quando a IDE é aberta nessa pasta.
 
 Para atualizar uma instalação existente:
 
 ```bash
-npx codesquad update
+npx codesquad-ai update
 ```
 
 ## IDEs Suportadas
@@ -228,15 +228,15 @@ For people who write, maintain, or review software and want to automate the repe
 **Prerequisite:** Node.js 20+
 
 ```bash
-npx codesquad init
+npx codesquad-ai init
 ```
 
-> **Note:** Always run your AI IDE from inside the project directory where you ran `npx codesquad init`. The `/codesquad` command is only available when the IDE is opened in that folder.
+> **Note:** Always run your AI IDE from inside the project directory where you ran `npx codesquad-ai init`. The `/codesquad` command is only available when the IDE is opened in that folder.
 
 To update an existing installation:
 
 ```bash
-npx codesquad update
+npx codesquad-ai update
 ```
 
 ## Supported IDEs
