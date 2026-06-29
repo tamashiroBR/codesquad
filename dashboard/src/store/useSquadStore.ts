@@ -49,10 +49,22 @@ export const useSquadStore = create<SquadStore>((set) => ({
   setConnected: (connected) => set({ isConnected: connected }),
 
   setSnapshot: (squads, activeStates, events) =>
-    set({
-      squads: new Map(squads.map((s) => [s.code, s])),
-      activeStates: new Map(Object.entries(activeStates)),
-      events: new Map(Object.entries(events ?? {})),
+    set((prev) => {
+      const squadMap = new Map(squads.map((s) => [s.code, s]));
+      const stateMap = new Map(Object.entries(activeStates));
+      // Auto-select a squad when none is chosen yet: prefer one with a live run,
+      // else the first squad. Without this the office falls back to an empty/idle
+      // view and the inspector asks the user to pick a squad manually.
+      let selectedSquad = prev.selectedSquad;
+      if (!selectedSquad && squadMap.size > 0) {
+        selectedSquad = [...stateMap.keys()][0] ?? squads[0].code;
+      }
+      return {
+        squads: squadMap,
+        activeStates: stateMap,
+        events: new Map(Object.entries(events ?? {})),
+        selectedSquad,
+      };
     }),
 
   updateSquadState: (squad, state, events) =>
@@ -62,6 +74,8 @@ export const useSquadStore = create<SquadStore>((set) => ({
       return {
         activeStates: new Map(prev.activeStates).set(squad, state),
         events: nextEvents,
+        // A squad that just started running becomes the selection if none was set.
+        selectedSquad: prev.selectedSquad ?? squad,
       };
     }),
 

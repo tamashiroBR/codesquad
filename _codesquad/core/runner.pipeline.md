@@ -305,6 +305,7 @@ Apply this transformation consistently for every write in this step.
 - Proceed to Post-Step Output Validation (below) before advancing.
 
 #### If `type: checkpoint`
+- **Update the dashboard FIRST — MANDATORY.** Before presenting anything, write `squads/{name}/state.json` with the squad `"status": "checkpoint"` and set the agent whose work is awaiting approval (the one that produced the artifact under review) to `"status": "checkpoint"`. Preserve everything else (desk positions, `startedAt`, `handoff`). This is what lights up the checkpoint panel in the Virtual Office — without it, the office shows the run as still "running" while it is actually blocked on you.
 - Present the checkpoint message to the user
 - If the checkpoint requires a choice (numbered list), present options as a numbered list
 - **Always include the file path** of any generated content the user needs to review. Example: "Review the content at `squads/{name}/output/{run_id}/v1/content.md` and let me know if it looks good."

@@ -28,14 +28,10 @@ function assignCharacters(agents: Agent[]): Map<string, CharacterName> {
   return assignments;
 }
 
-const DEMO_AGENTS: Agent[] = [
-  { id: '1', name: 'Researcher', icon: '', status: 'working', gender: 'female', desk: { col: 1, row: 1 } },
-  { id: '2', name: 'Writer', icon: '', status: 'idle', gender: 'male', desk: { col: 2, row: 1 } },
-  { id: '3', name: 'Editor', icon: '', status: 'done', gender: 'female', desk: { col: 3, row: 1 } },
-  { id: '4', name: 'Designer', icon: '', status: 'working', gender: 'female', desk: { col: 1, row: 2 } },
-  { id: '5', name: 'Reviewer', icon: '', status: 'checkpoint', gender: 'male', desk: { col: 2, row: 2 } },
-  { id: '6', name: 'Publisher', icon: '', status: 'idle', gender: 'male', desk: { col: 3, row: 2 } },
-];
+// No squad selected → empty office. The real roster (idle or live) comes from the
+// selected squad's state.json / squad.yaml, never from a hardcoded demo set.
+const EMPTY_ROSTER: Agent[] = [];
+
 
 export class OfficeScene extends Phaser.Scene {
   private agentSprites: Map<string, AgentSprite> = new Map();
@@ -84,11 +80,11 @@ export class OfficeScene extends Phaser.Scene {
       this.onStateUpdate(state);
     });
 
-    this.renderScene(DEMO_AGENTS);
+    this.renderScene(EMPTY_ROSTER);
   }
 
   private onStateUpdate(state: SquadState | null): void {
-    const agents = state?.agents ?? DEMO_AGENTS;
+    const agents = state?.agents ?? EMPTY_ROSTER;
     this.renderScene(agents);
   }
 

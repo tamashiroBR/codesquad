@@ -96,18 +96,13 @@ npx codesquad-ai update
 
 ## Escritório Virtual
 
-O Escritório Virtual é uma interface visual 2D que mostra seus agentes trabalhando em tempo real.
+O Escritório Virtual é uma interface visual 2D que mostra seus agentes trabalhando — ele se atualiza a cada passo do pipeline (não token a token).
 
-**Passo 1 — Gere o dashboard** (na sua IDE):
-
-```
-/codesquad dashboard
-```
-
-**Passo 2 — Rode o dashboard ao vivo** (no terminal, dentro do projeto):
+O dashboard **já é instalado pelo `npx codesquad-ai init`**, na pasta `dashboard/` do projeto. Para rodá-lo ao vivo (no terminal, dentro do projeto):
 
 ```bash
 cd dashboard
+npm install   # primeira vez
 npm run dev
 ```
 
@@ -296,18 +291,13 @@ npx codesquad-ai update
 
 ## Virtual Office
 
-The Virtual Office is a 2D visual interface that shows your agents working in real time.
+The Virtual Office is a 2D visual interface that shows your agents working — it refreshes on each pipeline step (not token by token).
 
-**Step 1 — Generate the dashboard** (in your IDE):
-
-```
-/codesquad dashboard
-```
-
-**Step 2 — Run the dashboard live** (in terminal, inside the project):
+The dashboard is **installed by `npx codesquad-ai init`**, in the project's `dashboard/` folder. To run it live (in the terminal, inside the project):
 
 ```bash
 cd dashboard
+npm install   # first time
 npm run dev
 ```
 
