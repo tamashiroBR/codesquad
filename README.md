@@ -42,6 +42,25 @@ Cada squad já vem com agentes, pipeline, gates e arquivos de dados (convençõe
 
 Para gerenciá-los pelo terminal: `npx codesquad-ai squads` (lista instalados e disponíveis), `npx codesquad-ai squads install <nome>` e `npx codesquad-ai squads remove <nome>`.
 
+## Compondo squads (cola manual)
+
+O codesquad roda **um squad por vez** — não há encadeamento automático entre squads (proposital: encadeamento ramificado tiraria a nitidez dos gates). Mas como cada squad grava artefatos em `squads/{nome}/output/{run_id}/` e o intake do dev-crew aceita **qualquer pedido ou arquivo**, dá pra encadear na mão.
+
+**Revisão → correção** (o pr-review alimenta o dev-crew):
+
+1. Rode o pr-review num PR — ele grava os achados em `squads/pr-review/output/{run_id}/findings.md` (agrupados por BLOCKER/MAJOR/MINOR/NIT).
+2. Rode o dev-crew apontando para eles. No pedido:
+   > Implemente as correções dos itens BLOCKER e MAJOR de `squads/pr-review/output/{run_id}/findings.md`
+
+O dev-crew transforma os achados numa spec e segue spec → design → implement → test → review.
+
+**Mesmo padrão para os outros especializados:**
+
+- **bug-hunter → dev-crew:** o `root-cause.md` (diagnóstico) vira o brief de uma correção ou evolução maior.
+- **refactor → dev-crew:** o `refactor-plan.md` (plano/alvo) orienta uma mudança estrutural mais ampla.
+
+> É **cola humana**: você referencia o caminho do arquivo (ou cola o conteúdo). O spec-writer do dev-crew **reinterpreta** os achados numa spec nova — confira essa spec no primeiro checkpoint antes de aprovar.
+
 ## Para quem?
 
 Para quem escreve, mantém ou revisa software e quer automatizar o trabalho repetitivo de engenharia com agentes — sem abrir mão do controle humano nos pontos que importam.
@@ -249,6 +268,25 @@ dev-crew's five roles cover the four phases: **Spec-writer** + **Architect** (an
 | 🔍 **pr-review** | Reviews someone's PR and posts a structured verdict | context → adversarial review → verdict → (checkpoint) → post | Severity rule: any BLOCKER → REQUEST CHANGES |
 
 Each squad ships with agents, pipeline, gates, and data files (repo conventions, review rubric, refactor catalog). Use them as-is or edit with `/codesquad edit <name>`.
+
+## Composing squads (manual handoff)
+
+codesquad runs **one squad per execution** — there's no automatic squad-to-squad chaining (by design: branchy chaining would blunt the gates). But since each squad writes artifacts to `squads/{name}/output/{run_id}/` and dev-crew's intake accepts **any request or file**, you can hand off by hand.
+
+**Review → fix** (pr-review feeds dev-crew):
+
+1. Run pr-review on a PR — it writes findings to `squads/pr-review/output/{run_id}/findings.md` (grouped by BLOCKER/MAJOR/MINOR/NIT).
+2. Run dev-crew pointing at them. In the request:
+   > Implement the fixes for the BLOCKER and MAJOR items in `squads/pr-review/output/{run_id}/findings.md`
+
+dev-crew turns the findings into a spec, then runs spec → design → implement → test → review.
+
+**Same pattern for the other specialized squads:**
+
+- **bug-hunter → dev-crew:** `root-cause.md` (the diagnosis) becomes the brief for a larger fix or evolution.
+- **refactor → dev-crew:** `refactor-plan.md` (the plan/target) drives a broader structural change.
+
+> It's **human glue**: you reference the file path (or paste the content). dev-crew's spec-writer **reinterprets** the findings into a fresh spec — review it at the first checkpoint before approving.
 
 ## Who is it for?
 
