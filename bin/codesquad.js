@@ -72,7 +72,7 @@ if (command === 'init') {
     npx codesquad agents                  List installed agents
     npx codesquad agents install <name>   Install a predefined agent
     npx codesquad squads                  List available + installed squads
-    npx codesquad squads install <name>   Install a built-in squad (e.g. feature-builder)
+    npx codesquad squads install <name>   Install a built-in squad (e.g. bug-hunter)
     npx codesquad squads remove <name>    Remove an installed squad
     npx codesquad runs [squad-name]       View execution history
 

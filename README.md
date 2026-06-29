@@ -10,7 +10,7 @@ codesquad é um framework de orquestração multi-agente focado em **desenvolvim
 
 Um squad é uma equipe de agentes de IA que colaboram em uma tarefa. Cada agente tem um papel específico e uma única responsabilidade. Eles executam em pipeline com checkpoints onde o agente pausa e pede sua aprovação antes de continuar. Os checkpoints são instruções no pipeline — o enforcement real de permissões depende da IDE host (ex: Claude Code, Cursor).
 
-Exemplo (o squad **feature-builder**):
+Exemplo (o squad **dev-crew**, instalado por padrão):
 
 - **Spec-writer** transforma o pedido ou a issue numa especificação com critérios de aceite
 - **Architect** desenha a mudança (módulos, contratos, ADR) antes de uma linha de código
@@ -20,16 +20,27 @@ Exemplo (o squad **feature-builder**):
 
 ## Squads inclusos
 
+O `npx codesquad-ai init` instala **um squad por padrão** — o **dev-crew**, um time de engenharia de software de ponta a ponta — e mantém três squads especializados no registro, prontos para instalar quando precisar (`npx codesquad-ai squads install <nome>`).
+
+**Padrão:**
+
 | Squad | Faz | Pipeline | Gate mecânico |
 |-------|-----|----------|---------------|
-| 🛠️ **feature-builder** | Pedido/issue → mudança implementada, testada, revisada e em PR | spec → design → implement → verify → review → PR | Suíte verde antes da revisão; só APPROVE habilita o PR |
+| 👥 **dev-crew** · Time de Engenharia de Software | Tarefa de software → análise, desenvolvimento, qualidade e testagem, ancorado em best-practices de engenharia e práticas de mercado | spec → design → implement → verify → review → entrega | Suíte verde antes da revisão; só APPROVE habilita a entrega |
+
+Os cinco papéis do dev-crew cobrem as quatro fases: **Spec-writer** + **Architect** (análise), **Coder** (desenvolvimento), **Tester** (testagem) e **Reviewer** (qualidade).
+
+**Especializados** (opcionais — instale com `npx codesquad-ai squads install <nome>`):
+
+| Squad | Faz | Pipeline | Gate mecânico |
+|-------|-----|----------|---------------|
 | 🐞 **bug-hunter** | Relato de bug → fix verificado com teste de regressão | reproduzir → diagnosticar causa raiz → fix + teste → verificar | O teste de regressão precisa falhar no código antigo e passar no novo |
 | 🧹 **refactor** | Melhora a estrutura sem mudar o comportamento | alvo → rede de segurança → plano → passos pequenos → verificar | Rede de segurança verde antes; comportamento preservado depois |
 | 🔍 **pr-review** | Revisa um PR de terceiro e posta um veredito estruturado | contexto → revisão adversarial → veredito → (checkpoint) → postar | Regra de severidade: qualquer BLOCKER → REQUEST CHANGES |
 
 Cada squad já vem com agentes, pipeline, gates e arquivos de dados (convenções do repo, rubrica de revisão, catálogo de refactor). Use como estão ou edite com `/codesquad edit <nome>`.
 
-Todos são instalados pelo `npx codesquad-ai init`. Para gerenciá-los pelo terminal: `npx codesquad-ai squads` (lista os instalados e os disponíveis), `npx codesquad-ai squads install <nome>` (adiciona um) e `npx codesquad-ai squads remove <nome>` (remove um).
+Para gerenciá-los pelo terminal: `npx codesquad-ai squads` (lista instalados e disponíveis), `npx codesquad-ai squads install <nome>` e `npx codesquad-ai squads remove <nome>`.
 
 ## Para quem?
 
@@ -134,7 +145,7 @@ O squad executa automaticamente, pausando nos checkpoints onde o agente pede sua
 
 ```
 /codesquad
-/codesquad rode o squad feature-builder
+/codesquad rode o squad dev-crew
 /codesquad rode o squad bug-hunter
 /codesquad crie um Squad que audita um pipeline de CI e propõe gates de qualidade
 /codesquad crie um Squad que projeta uma API REST a partir de um documento de requisitos
@@ -162,7 +173,7 @@ Esses são os comandos **dentro da IDE**. No **terminal**, a CLI `npx codesquad-
 | `npx codesquad-ai init` | Instala o codesquad no projeto atual (novo **ou** existente) |
 | `npx codesquad-ai update` | Atualiza o core |
 | `npx codesquad-ai squads` | Lista squads instalados e disponíveis |
-| `npx codesquad-ai squads install <nome>` | Instala um squad incluso (ex.: `feature-builder`) |
+| `npx codesquad-ai squads install <nome>` | Instala um squad incluso (ex.: `bug-hunter`) |
 | `npx codesquad-ai squads remove <nome>` | Remove um squad instalado |
 | `npx codesquad-ai install <skill>` | Instala uma skill do catálogo |
 | `npx codesquad-ai uninstall <skill>` | Remove uma skill |
@@ -214,7 +225,7 @@ codesquad is a multi-agent orchestration framework focused on **software develop
 
 A squad is a team of AI agents that collaborate on a task. Each agent has one clear responsibility. They run in a pipeline with checkpoints where the agent pauses and asks for your approval before continuing. Checkpoints are instructions in the pipeline — actual permission enforcement depends on the host IDE (e.g., Claude Code, Cursor).
 
-Example (the **feature-builder** squad):
+Example (the **dev-crew** squad, installed by default):
 
 - **Spec-writer** turns the request or issue into a spec with acceptance criteria
 - **Architect** designs the change (modules, contracts, ADR) before any code
@@ -224,9 +235,20 @@ Example (the **feature-builder** squad):
 
 ## Built-in squads
 
+`npx codesquad-ai init` installs **one squad by default** — **dev-crew**, an end-to-end software engineering team — and keeps three specialized squads in the registry, ready to install when you need them (`npx codesquad-ai squads install <name>`).
+
+**Default:**
+
 | Squad | Does | Pipeline | Mechanical gate |
 |-------|------|----------|-----------------|
-| 🛠️ **feature-builder** | Request/issue → implemented, tested, reviewed change in a PR | spec → design → implement → verify → review → PR | Green suite before review; only APPROVE unlocks the PR |
+| 👥 **dev-crew** · Software Engineering Team | A software task → analysis, development, quality, and testing, grounded in engineering best practices and market practice | spec → design → implement → verify → review → ship | Green suite before review; only APPROVE unlocks delivery |
+
+dev-crew's five roles cover the four phases: **Spec-writer** + **Architect** (analysis), **Coder** (development), **Tester** (testing), **Reviewer** (quality).
+
+**Specialized** (optional — install with `npx codesquad-ai squads install <name>`):
+
+| Squad | Does | Pipeline | Mechanical gate |
+|-------|------|----------|-----------------|
 | 🐞 **bug-hunter** | Bug report → verified fix with a regression test | reproduce → root cause → fix + test → verify | The regression test must fail on the old code and pass on the new |
 | 🧹 **refactor** | Improves structure without changing behavior | target → safety net → plan → small steps → verify | Safety net green first; behavior preserved after |
 | 🔍 **pr-review** | Reviews someone's PR and posts a structured verdict | context → adversarial review → verdict → (checkpoint) → post | Severity rule: any BLOCKER → REQUEST CHANGES |
@@ -322,7 +344,7 @@ The squad runs automatically, pausing at checkpoints where the agent asks for yo
 ## Examples
 
 ```
-/codesquad run feature-builder
+/codesquad run dev-crew
 /codesquad run bug-hunter
 /codesquad create "Squad that audits a CI pipeline and proposes quality gates"
 /codesquad create "Squad that designs a REST API from a requirements document"
@@ -350,7 +372,7 @@ Those run **inside the IDE**. In the **terminal**, the `npx codesquad-ai` CLI ha
 | `npx codesquad-ai init` | Install Codesquad into the current project (new **or** existing) |
 | `npx codesquad-ai update` | Update the core |
 | `npx codesquad-ai squads` | List installed + available squads |
-| `npx codesquad-ai squads install <name>` | Install a built-in squad (e.g. `feature-builder`) |
+| `npx codesquad-ai squads install <name>` | Install a built-in squad (e.g. `bug-hunter`) |
 | `npx codesquad-ai squads remove <name>` | Remove an installed squad |
 | `npx codesquad-ai install <skill>` | Install a skill from the catalog |
 | `npx codesquad-ai uninstall <skill>` | Remove a skill |

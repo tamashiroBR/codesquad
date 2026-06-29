@@ -2,7 +2,7 @@ import assert from "node:assert";
 import { diffStates, EventTracker } from "./squadEvents.mjs";
 
 const mk = (over = {}) => ({
-  squad: "feature-builder",
+  squad: "dev-crew",
   status: "running",
   step: { current: 1, total: 5, label: "spec" },
   agents: [

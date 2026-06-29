@@ -1,0 +1,97 @@
+name: "Pipeline — Feature Builder"
+version: "1.0.0"
+created: "2026-06-25"
+squad: "dev-crew"
+
+description: >
+  Spec → Design → Implement → Verify → Review → PR. Five checkpoints keep a human in
+  control of every irreversible or consequential decision. Verification (green tests) is
+  a hard gate: the pipeline cannot reach review with a red suite.
+
+mode: "alta-performance"
+
+steps:
+  - id: step-01
+    name: "Intake do Pedido"
+    type: checkpoint
+    file: steps/step-01-intake.md
+  - id: step-02
+    name: "Especificação"
+    type: agent
+    agent: spec-writer
+    tasks: [write-spec]
+    file: steps/step-02-spec.md
+    depends_on: step-01
+  - id: step-03
+    name: "Aprovação da Spec"
+    type: checkpoint
+    file: steps/step-03-approve-spec.md
+    depends_on: step-02
+  - id: step-04
+    name: "Desenho da Arquitetura"
+    type: agent
+    agent: architect
+    tasks: [design-change]
+    file: steps/step-04-design.md
+    depends_on: step-03
+  - id: step-05
+    name: "Aprovação do Desenho"
+    type: checkpoint
+    file: steps/step-05-approve-design.md
+    depends_on: step-04
+  - id: step-06
+    name: "Implementação"
+    type: agent
+    agent: coder
+    tasks: [implement]
+    file: steps/step-06-implement.md
+    depends_on: step-05
+  - id: step-07
+    name: "Verificação (testes)"
+    type: agent
+    agent: tester
+    tasks: [write-and-run-tests]
+    file: steps/step-07-verify.md
+    depends_on: step-06
+  - id: step-08
+    name: "Revisão Adversarial"
+    type: agent
+    agent: reviewer
+    tasks: [review-change]
+    file: steps/step-08-review.md
+    depends_on: step-07
+  - id: step-09
+    name: "Aprovação para PR"
+    type: checkpoint
+    file: steps/step-09-approve-pr.md
+    depends_on: step-08
+  - id: step-10
+    name: "Abertura do Pull Request"
+    type: agent
+    agent: coder
+    tasks: [open-pr]
+    file: steps/step-10-open-pr.md
+    depends_on: step-09
+
+checkpoints: [step-01, step-03, step-05, step-09]
+
+gates:
+  - id: green-suite
+    after: step-07
+    rule: >
+      O pipeline NÃO avança para a revisão (step-08) se a suíte estiver vermelha.
+      Em falha, retorna ao coder (step-06) com o relatório de verificação.
+      Máximo de 3 ciclos antes de escalar ao usuário.
+  - id: review-verdict
+    after: step-08
+    rule: >
+      Veredito REQUEST CHANGES retorna ao coder (step-06) com os findings.
+      Só APPROVE habilita o checkpoint de PR (step-09).
+
+output:
+  artifacts:
+    - output/spec.md
+    - output/design.md
+    - output/verification-report.md
+    - output/review.md
+    - output/pr-summary.md

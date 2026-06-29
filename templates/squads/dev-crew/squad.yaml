@@ -1,0 +1,68 @@
+name: "Time de Engenharia de Software"
+code: "dev-crew"
+description: >
+  Um time único que leva uma tarefa de software de ponta a ponta — análise,
+  desenvolvimento, qualidade e testagem — ancorado em best-practices de engenharia
+  e práticas de mercado. Cinco papéis com checkpoints humanos nos pontos de decisão:
+  spec e desenho de arquitetura (análise), implementação (desenvolvimento), testes
+  (testagem) e revisão adversarial (qualidade). Nada é entregue sem spec aprovada,
+  suíte de testes verde e revisão aprovada.
+icon: "👥"
+version: "1.0.0"
+created: "2026-06-25"
+mode: "alta-performance"
+
+company: "_codesquad/_memory/company.md"
+preferences: "_codesquad/_memory/preferences.md"
+memory: "_memory/memories.md"
+
+target_repo: "Set per run — a local path or git URL (optional codebase investigation)"
+domain: "software-development"
+performance_mode: "alta-performance"
+
+skills:
+  - github
+  - run-tests
+  - git-workflow
+
+data:
+  - pipeline/data/repo-conventions.md
+  - pipeline/data/definition-of-done.md
+  - pipeline/data/review-rubric.md
+  - pipeline/data/anti-patterns.md
+
+agents:
+  - id: spec-writer
+    name: "Sofia Spec"
+    gender: "female"
+    icon: "📋"
+    custom: agents/spec-writer.custom.md
+
+  - id: architect
+    name: "Artur Arquiteto"
+    gender: "male"
+    icon: "🧠"
+    custom: agents/architect.custom.md
+
+  - id: coder
+    name: "Caio Código"
+    gender: "male"
+    icon: "⌨️"
+    custom: agents/coder.custom.md
+
+  - id: tester
+    name: "Tânia Teste"
+    gender: "female"
+    icon: "🧪"
+    custom: agents/tester.custom.md
+
+  - id: reviewer
+    name: "Rui Revisor"
+    gender: "male"
+    icon: "🔍"
+    custom: agents/reviewer.custom.md
+
+pipeline:
+  entry: pipeline/pipeline.yaml
+
+output_dir: output/

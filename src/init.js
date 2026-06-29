@@ -253,6 +253,10 @@ async function writeProjectReadme(targetDir) {
   await writeFile(destPath, content, 'utf-8');
 }
 
+// Only these squads are installed by default. The others stay in the registry
+// (templates/squads) and are added on demand via `npx codesquad squads install`.
+const DEFAULT_SQUADS = ['dev-crew'];
+
 async function copyCommonTemplates(targetDir) {
   const entries = await getTemplateEntries(TEMPLATES_DIR);
 
@@ -261,6 +265,14 @@ async function copyCommonTemplates(targetDir) {
     if (entry.replace(/\\/g, '/').includes('/ide-templates/')) continue;
 
     const relativePath = entry.slice(TEMPLATES_DIR.length + 1);
+
+    // Skip non-default squads — they're installable later via `squads install`.
+    const rel = relativePath.replace(/\\/g, '/');
+    if (rel.startsWith('squads/')) {
+      const squadName = rel.split('/')[1];
+      if (squadName && !DEFAULT_SQUADS.includes(squadName)) continue;
+    }
+
     const destPath = join(targetDir, relativePath);
     const destDir = dirname(destPath);
     await mkdir(destDir, { recursive: true });
