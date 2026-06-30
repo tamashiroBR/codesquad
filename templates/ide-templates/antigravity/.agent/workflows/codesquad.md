@@ -19,10 +19,10 @@ If `company.md` is empty or contains `<!-- NOT CONFIGURED -->`:
 4. Ask for their company name/description and website URL
 5. Use WebFetch on their URL + WebSearch with their company name to research:
    - Company description and sector
-   - Target audience
+   - Engineering domain (what they build)
    - Products/services offered
-   - Tone of voice (inferred from website copy)
-   - Social media profiles found
+   - Tech stack (languages, frameworks — inferred from the site/docs)
+   - Public repositories or engineering blog, if any
 6. Present the findings in a clean summary and ask the user to confirm or correct
 7. Save the confirmed profile to `_codesquad/_memory/company.md`
 8. Show the main menu

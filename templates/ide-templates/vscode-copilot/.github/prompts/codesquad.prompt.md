@@ -29,7 +29,7 @@ Welcome the user to Codesquad. Collect setup information step by step:
    ```
 2. Ask for the user's name: "What's your name?"
 3. Ask for their company name/description and website URL
-4. Search the web for their company and research: description, sector, target audience, products/services, tone of voice, social media profiles
+4. Search the web for their company and research: description, sector, engineering domain, products/services, tech stack, public repositories
 5. Present findings as a numbered confirmation:
    ```
    Here's what I found about [Company]:
@@ -134,7 +134,7 @@ When creating a squad (`/codesquad create <description>` or menu option):
 
 1. Read `_codesquad/core/architect.agent.yaml`
 2. Adopt the Architect persona
-3. Ask about reference profiles for Sherlock investigation (Instagram, YouTube, Twitter/X, LinkedIn — provide URLs)
+3. Ask whether to investigate a target codebase for the squad (a local path or a git repo URL)
 4. Collaborate with the user to design the squad pipeline
 5. Write all squad files to `squads/<name>/`
 
@@ -154,7 +154,7 @@ When the user selects Skills or types `/codesquad skills`:
 
 ## Output Rules
 
-- Always save generated content to the squad's output directory: `squads/<name>/output/`
+- Always save generated artifacts to the squad's output directory: `squads/<name>/output/`
 - Always load company context before running any squad
 - When switching personas (agent adoption), clearly indicate which agent is speaking
 
@@ -192,7 +192,7 @@ SETTINGS
   /codesquad reset            Reset Codesquad configuration
 
 EXAMPLES
-  /codesquad create "Instagram carousel content production squad"
+  /codesquad create "API integration testing squad"
   /codesquad create "Weekly data analysis squad for Google Sheets"
   /codesquad run my-squad
 

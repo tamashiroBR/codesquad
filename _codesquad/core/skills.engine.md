@@ -68,7 +68,7 @@ For the full SKILL.md specification, see `skills/codesquad-skill-creator/referen
       Env: APIFY_TOKEN ✅ configured
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    📜 Image Optimizer v0.2.0 (script)
-      Resize and compress images for social media
+      Resize and compress images for the web
       Categories: design, automation
       Env: (none required)
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -336,16 +336,15 @@ When the Architect reaches Phase 3.5 during squad creation:
    - What automations would speed up the workflow?
 
 4. **Match skill categories against squad needs**:
-   - Research/data squads → check for: scraping, data, analytics skills
-   - Content squads → check for: design, social-media skills
-   - Communication squads → check for: messaging, notification skills
-   - Automation squads → check for: automation, integration skills
+   - Code & version control → check for: github, git-workflow skills
+   - Testing & CI → check for: run-tests, ci skills
+   - Issue tracking & project mgmt → check for: github, project-management skills
 
 5. **Only suggest skills when native skills are insufficient**:
    `web_search` and `web_fetch` cover basic web research and data fetching.
    Only suggest additional skills when:
    - The squad needs structured data extraction (scraping)
-   - The squad interacts with specific APIs (social media, design tools, messaging)
+   - The squad interacts with specific APIs (GitHub, CI/CD, issue trackers)
    - The squad requires local script execution (image processing, data transformation)
    - The squad benefits from specialized behavioral prompts
 
@@ -357,7 +356,7 @@ When the Architect reaches Phase 3.5 during squad creation:
    These skills could enhance your squad:
 
    1. 🔌 apify: Scrape structured data from any website
-   2. 📜 image-optimizer: Resize and compress images for social media
+   2. 📜 image-optimizer: Resize and compress images for the web
    3. 💡 seo-guidelines: Best practices for SEO-optimized content
 
    Reply with the numbers of skills you'd like to install (e.g. "1 3"), or press Enter to skip.

@@ -19,15 +19,14 @@ Type `/codesquad` to open the main menu, or use any of these commands:
 - `_codesquad/_memory/` — Persistent memory (company context, preferences)
 - `skills/` — Installed skills (integrations, scripts, prompts)
 - `squads/` — User-created squads
-- `squads/{name}/_investigations/` — Sherlock content investigations (profile analyses)
-- `squads/{name}/output/` — Generated content and files
-- `_codesquad/_browser_profile/` — Persistent browser sessions (login cookies, localStorage)
+- `squads/{name}/_investigations/` — Sherlock codebase investigations (repo profiles)
+- `squads/{name}/output/` — Generated artifacts and files
 
 ## How It Works
 
 1. The `/codesquad` workflow is the entry point for all interactions
 2. The **Architect** agent creates and modifies squads
-3. During squad creation, the **Sherlock** investigator can analyze reference profiles (Instagram, YouTube, Twitter/X, LinkedIn) to extract real content patterns
+3. During squad creation, the **Sherlock** investigator can analyze a target codebase (a local path or git repo URL) to extract its real stack, structure, and conventions
 4. The **Pipeline Runner** executes squads automatically
 5. All tasks run inline and sequentially (no background subagents)
 6. Checkpoints pause execution for user input/approval

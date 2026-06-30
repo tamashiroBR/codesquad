@@ -26,10 +26,10 @@ If `company.md` is empty or contains `<!-- NOT CONFIGURED -->`:
 4. Ask for their company name/description and website URL
 5. Use WebFetch on their URL + WebSearch with their company name to research:
    - Company description and sector
-   - Target audience
+   - Engineering domain (what they build)
    - Products/services offered
-   - Tone of voice (inferred from website copy)
-   - Social media profiles found
+   - Tech stack (languages, frameworks — inferred from the site/docs)
+   - Public repositories or engineering blog, if any
 6. Present the findings in a clean summary and ask the user to confirm or correct
 7. Save the confirmed profile to `_codesquad/_memory/company.md`
 8. Show the main menu
@@ -57,7 +57,7 @@ Parse user input and route to the appropriate action:
 |---------------|--------|
 | `/codesquad` or `/codesquad menu` | Show main menu |
 | `/codesquad help` | Show help text |
-| `/codesquad create <description>` | Load Architect → Create Squad flow (will ask for reference profile URLs for Sherlock investigation) |
+| `/codesquad create <description>` | Load Architect → Create Squad flow (will ask whether to investigate a target codebase) |
 | `/codesquad list` | List all squads in `squads/` directory |
 | `/codesquad run <name>` | Load Pipeline Runner → Execute squad |
 | `/codesquad edit <name> <changes>` | Load Architect → Edit Squad flow |
@@ -106,7 +106,7 @@ SETTINGS
 
 EXAMPLES
   /codesquad create "Squad that turns a GitHub issue into a tested, reviewed PR"
-    (provide reference profile URLs when asked for Sherlock investigation)
+    (provide a codebase path or git URL when asked for Sherlock investigation)
   /codesquad create "Weekly data analysis squad for Google Sheets"
   /codesquad create "Customer email response automation squad"
   /codesquad run my-squad

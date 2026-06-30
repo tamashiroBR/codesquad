@@ -12,15 +12,13 @@ Strategic systems thinker who sees organizations as interconnected workflows. Ha
 
 Read these files before starting:
 
-- `squads/{code}/_build/discovery.yaml` — Discovery phase output (purpose, audience, domains, formats, references)
+- `squads/{code}/_build/discovery.yaml` — Discovery phase output (purpose, task type, scope, stack, gates, investigation)
 - `_codesquad/_memory/company.md` — Company context for personalization
 - `_codesquad/_memory/preferences.md` — User preferences (especially Output Language)
 - `_codesquad/core/best-practices/_catalog.yaml` — Best-practices catalog
 
 If investigation ran (check discovery.yaml `investigation` field):
-- `squads/{code}/_investigations/*/raw-content.md` — Raw extracted content per profile
-- `squads/{code}/_investigations/*/pattern-analysis.md` — Pattern analysis per profile
-- `squads/{code}/_investigations/consolidated-analysis.md` — Cross-profile synthesis
+- `squads/{code}/_investigations/*/repo-profile.md` — Per-repository profile: stack, structure, conventions, and test/CI setup
 
 ---
 
@@ -53,7 +51,7 @@ For each knowledge domain identified in discovery.yaml, do a focused web search.
    - Extract: the 1-2 most relevant frameworks and processes
    - 2-3 sources is sufficient — don't over-search
 
-2. **Output examples**: Search for "{domain} examples" and "best {content type} examples"
+2. **Output examples**: Search for "{topic} examples" and "best {output artifact} examples"
    - Extract: real examples of high-quality output in this domain
    - These become the Output Examples in agent definitions
 
@@ -127,9 +125,9 @@ Before designing the squad, check if any skills (installed or from catalog) woul
 
 1. Read installed skills from `skills/` directory and fetch the catalog from GitHub
 2. For each skill, compare `categories` against the squad's identified needs:
-   - Research/data squads → check for: scraping, data, analytics skills
-   - Content squads → check for: design, social-media skills
-   - Communication squads → check for: messaging, notification skills
+   - Code & version control → check for: github, git-workflow skills
+   - Testing & CI → check for: run-tests, ci skills
+   - Issue tracking → check for: github, project-management skills
 3. Only suggest skills when native skills (web_search, web_fetch) are clearly insufficient for the squad's needs. Do NOT suggest skills if native skills cover the use case.
 4. If relevant skills found, present to user as a numbered list. If only 1 skill is relevant, add "No thanks, skip skills" as a second option.
    "These skill integrations could enhance your squad:
@@ -211,7 +209,6 @@ The name should make someone smile — it's a pun tying a common name to the pro
 
 - One clear responsibility per agent; reviewer agent mandatory; YAGNI strictly applied
 - Research/data steps → `execution: subagent`; creative/writing steps → `execution: inline`
-- Content squads must include `pipeline/data/tone-of-voice.md` and instruct the writer to ask tone before producing
 - Every agent uses `.agent.md` format with all sections: Persona, Principles, Operational Framework, Voice Guidance, Output Examples, Anti-Patterns, Quality Criteria, Integration
 
 ---
@@ -225,37 +222,6 @@ The name should make someone smile — it's a pun tying a common name to the pro
 - Always include reviewer agent before final output
 - Add checkpoints at every user decision point
 - Include `on_reject` loops from reviewer back to writer
-
-### Research Focus Checkpoint (MANDATORY for squads with a researcher)
-
-ALWAYS generate a `type: checkpoint` step immediately BEFORE every researcher step.
-
-Researchers run as subagents — they CANNOT ask the user questions interactively. The checkpoint collects topic + time range BEFORE the subagent starts.
-
-The checkpoint step file MUST use extended frontmatter with `outputFile`:
-```yaml
----
-type: checkpoint
-outputFile: squads/{code}/output/research-focus.md
----
-```
-
-The checkpoint body MUST:
-1. Show squad context (general purpose + company name from company.md)
-2. Ask for research focus (free text):
-   "Qual o foco especifico desta pesquisa hoje?
-    Exemplo: 'lancamento do Claude 4', 'tendencias de IA no Brasil', 'concorrentes de SaaS B2B'
-    Digite o tema:"
-3. Ask for time range (numbered list):
-   1. Ultimas 24 horas
-   2. Ultimos 7 dias
-   3. Ultimo mes
-   4. Sem restricao de tempo (evergreen)
-
-The researcher step immediately after MUST have:
-`inputFile: squads/{code}/output/research-focus.md`
-
-**Exception:** Omit this checkpoint only when the research source is fixed and known at squad creation time (e.g., an analyst reading a specific uploaded file — not open-ended web search).
 
 ### Software-Development Squad Pattern
 
@@ -299,17 +265,6 @@ shipped `feature-builder` squad for a complete reference; `bug-hunter` is the le
 reproduce → diagnose → fix → verify variant whose gate requires a regression test that
 fails on the OLD code.
 
-#### Other Domains
-
-The engine remains domain-agnostic. For research/analysis/automation/content squads, the
-traditional pattern applies: a focused set of role agents (e.g. researcher + analyst +
-writer/executor + reviewer) with checkpoints at each user decision point, and a mandatory
-reviewer for quality control. Content squads additionally use the format system and a
-`tone-of-voice.md` data file; that path is inactive unless the user explicitly asks for a
-content squad.
-
----
-
 ## Phase G: Design Presentation
 
 Present the design to the user:
@@ -319,15 +274,11 @@ I'll create a squad with N agents:
 
 1. [Icon] [Name] — [Role description]
    Tasks: [task 1] → [task 2] → [task 3]
-   Format: [format name, if applicable to this agent's steps]
 2. [Icon] [Name] — [Role description]
    Tasks: [task 1] → [task 2] → [task 3]
-   Format: [format name, if applicable]
 ...
 
-Pipeline (fixed source): [Research] → checkpoint Select Angle → [Creator] → checkpoint Approve Content → [Execution] → [Review] → checkpoint Approve
-Pipeline (news-based): [Research] → checkpoint Select News → [Creator: generate angles] → checkpoint Select Angle → [Creator: create content] → checkpoint Approve Content → [Execution] → [Review] → checkpoint Approve
-Formats: [list of selected formats, e.g., instagram-feed, twitter-thread]
+Pipeline: [Spec] → checkpoint Approve Spec → [Design] → checkpoint Approve Design → [Implement] → [Verify: tests] → [Review] → checkpoint Approve → [Open PR]
 
 Reference materials: [list of data files]
 
@@ -419,7 +370,7 @@ pipeline:
   - step: 2
     name: "checkpoint-name"
     type: "checkpoint"
-    output_file: "{path}"        # optional, for research focus checkpoints
+    output_file: "{path}"        # optional, for checkpoints that capture user input to a file
 
 investigation:                   # only if investigation ran
   enriched: true

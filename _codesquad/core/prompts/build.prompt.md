@@ -10,7 +10,7 @@ Load these files before starting:
 - `_codesquad/_memory/company.md` — company context for personalization
 - `_codesquad/_memory/preferences.md` — user preferences
 - Best-practices files referenced by design.yaml agents (load on demand from `_codesquad/core/best-practices/`)
-- Investigation `raw-content.md` files from `squads/{code}/_investigations/` (if they exist, use for output examples and voice guidance)
+- Investigation `repo-profile.md` files from `squads/{code}/_investigations/` (if they exist, use for the project's real stack, structure, and conventions)
 
 ---
 
@@ -23,8 +23,7 @@ Generate these files directly — they are compilations of data already gathered
 3. `squads/{code}/pipeline/data/quality-criteria.md` — compile quality criteria
 4. `squads/{code}/pipeline/data/output-examples.md` — compile output examples
 5. `squads/{code}/pipeline/data/anti-patterns.md` — compile anti-patterns
-6. `squads/{code}/pipeline/data/tone-of-voice.md` — for content squads, generate with the standard 6 tones
-7. `squads/{code}/_memory/memories.md` — empty squad memory file with section headers:
+6. `squads/{code}/_memory/memories.md` — empty squad memory file with section headers:
    ```markdown
    # Squad Memory: {squad-name}
 
@@ -52,15 +51,11 @@ Generate these files directly — they are compilations of data already gathered
 - **research-brief.md** — Full compiled research: all sources, frameworks, examples, vocabulary collected during discovery.
 - **domain-framework.md** — The operational framework for the squad's domain: step-by-step methodology extracted during design.
 - **quality-criteria.md** — Comprehensive quality criteria: scoring rubrics, evaluation criteria, acceptance thresholds.
-- **output-examples.md** — Complete examples of the squad's final output: 2-3 full examples synthesized from research. If investigation `raw-content.md` files exist, use real content patterns from them.
+- **output-examples.md** — Complete examples of the squad's final output: 2-3 full examples synthesized from the design research. If a `repo-profile.md` exists, use the project's real stack and conventions.
 - **anti-patterns.md** — Domain mistakes and pitfalls: common errors, why they happen, how to avoid them.
-- **tone-of-voice.md** — REQUIRED for content squads. Generate with the standard 6 tones.
 
 For agent personas, consult the relevant best-practices files from `_codesquad/core/best-practices/` that were loaded. Use the discipline knowledge (principles, techniques, quality criteria, examples) to create high-quality agents tailored to this specific squad.
 
-**Content squad rules:**
-- Content squad writers MUST include a tone selection step before writing (read tone-of-voice.md, recommend a tone, present options, wait for user choice)
-- Format knowledge is injected automatically by the Pipeline Runner via the `format:` field in the step frontmatter. No manual loading of platform files needed.
 
 ---
 
@@ -88,7 +83,6 @@ Generate these files. Use the Write tool for all file creation — never use Bas
        - pipeline/data/quality-criteria.md
        - pipeline/data/output-examples.md
        - pipeline/data/anti-patterns.md
-       - pipeline/data/tone-of-voice.md  # for content squads
      ```
 
 2. **`squads/{code}/squad-party.csv`** — Agent manifest
@@ -325,9 +319,9 @@ Every step file begins with YAML frontmatter followed by the markdown body. The 
 ---
 execution: subagent   # subagent = runs in background via Task tool; inline = runs in the main conversation
 agent: {agent-id}     # the agent's id (matches the id field in their .agent.md frontmatter)
-format: {format-id}   # OPTIONAL — e.g., "instagram-feed". Pipeline Runner auto-injects from _codesquad/core/best-practices/
-                      # Use for content creation steps where platform-specific rules should guide the agent
-                      # Omit for non-content steps (research, analysis, review without platform context)
+format: {best-practice-id}  # OPTIONAL — e.g., "api-design". Pipeline Runner auto-injects from _codesquad/core/best-practices/
+                      # Use when a step should follow a specific engineering best-practice
+                      # Omit when no specific best-practice applies
 inputFile: squads/{code}/output/{filename}.{ext}   # path to input file from previous step — MUST use output/ prefix
 outputFile: squads/{code}/output/{filename}.{ext}  # path where this step saves its output — MUST use output/ prefix
                                                     # NEVER use pipeline/data/ for outputFile — that folder is for static
@@ -336,7 +330,7 @@ outputFile: squads/{code}/output/{filename}.{ext}  # path where this step saves 
                                                     # so any path outside output/ will bypass run_id scoping entirely.
 model_tier: fast      # ONLY for execution: subagent. fast = lightweight model; powerful = default model
                       # Set fast for: investigator agents (data extraction, Sherlock subagents)
-                      # Set powerful for: writer, creator, reviewer, strategy, researcher agents
+                      # Set powerful for: spec-writer, architect, coder, reviewer agents
                       # Omit model_tier for execution: inline steps
 ---
 ```
@@ -348,15 +342,15 @@ type: checkpoint
 ---
 ```
 
-For **research focus checkpoints** (where the user's response is saved to a file), use extended frontmatter with `outputFile`:
+For **intake checkpoints** (where the user's response is saved to a file), use extended frontmatter with `outputFile`:
 ```yaml
 ---
 type: checkpoint
-outputFile: squads/{code}/output/research-focus.md
+outputFile: squads/{code}/output/intake.md
 ---
 ```
 The Pipeline Runner writes the user's response to this file before proceeding.
-The next step (researcher) reads it as `inputFile: squads/{code}/output/research-focus.md`.
+The next step reads it as `inputFile: squads/{code}/output/intake.md`.
 Using `output/` ensures the path transformation applies and the file lands in the run_id folder.
 
 Every pipeline step file MUST contain ALL of the following sections. Target 60-120 lines per step.
@@ -479,7 +473,7 @@ If ANY check fails: fix the step file and re-validate. Max 2 fix attempts.
 For EACH agent step in the pipeline that produces visuals, renders images, or publishes:
 - [ ] The IMMEDIATELY preceding step in the pipeline is `type: checkpoint`
 
-"Produces visuals, renders, or publishes" means the step's agent is responsible for image generation, HTML-to-image rendering, slide creation, social media posting, email sending, or any other irreversible distribution action.
+"Produces visuals, renders, or publishes" means the step's agent is responsible for pushing to a remote, opening or merging a pull request, deploying, or any other irreversible distribution action.
 
 If ANY check fails:
 1. Insert a new `type: checkpoint` step immediately before the offending agent step

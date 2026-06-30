@@ -128,7 +128,7 @@ Before executing any step that references an agent:
    - Apply Voice Guidance (vocabulary always/never use, tone rules)
 4. **Inject format context**: Check if the current step's frontmatter contains a `format:` field.
    If present:
-   a. Read `_codesquad/core/best-practices/{format}.md` (e.g., `_codesquad/core/best-practices/instagram-feed.md`)
+   a. Read `_codesquad/core/best-practices/{format}.md` (e.g., `_codesquad/core/best-practices/api-design.md`)
       - If the file does not exist → **WARNING**: "Format '{format}' not found in _codesquad/core/best-practices/. Skipping format injection." Continue without format.
    b. Parse the YAML frontmatter to extract the `name` field
    c. Extract the Markdown body (everything after the YAML frontmatter closing `---`)
@@ -197,8 +197,8 @@ Before saving any output file in a step, apply these rules to determine the fina
 #### Step 1 — Insert run_id
 
 - If the path starts with `squads/{name}/output/`, insert `{run_id}/` immediately after `output/`
-  - Example: `squads/carousel/output/slides/draft.md` → `squads/carousel/output/2026-03-03-143022/slides/draft.md`
-  - Example: `squads/carousel/output/angles-brief.yaml` → `squads/carousel/output/2026-03-03-143022/angles-brief.yaml`
+  - Example: `squads/dev-crew/output/report/draft.md` → `squads/dev-crew/output/2026-03-03-143022/slides/draft.md`
+  - Example: `squads/dev-crew/output/plan.yaml` → `squads/dev-crew/output/2026-03-03-143022/angles-brief.yaml`
 - If the path does NOT start with `squads/{name}/output/`, leave it unchanged
 
 #### Step 2 — Insert version folder
@@ -206,8 +206,8 @@ Before saving any output file in a step, apply these rules to determine the fina
 Apply to every path that was transformed in Step 1:
 
 1. Determine the **output group** = the parent directory of the file (after Step 1 transformation)
-   - Example: `squads/carousel/output/2026-03-03-143022/slides/draft.md` → group is `squads/carousel/output/2026-03-03-143022/slides/`
-   - Example: `squads/carousel/output/2026-03-03-143022/angles-brief.yaml` → group is `squads/carousel/output/2026-03-03-143022/`
+   - Example: `squads/dev-crew/output/2026-03-03-143022/slides/draft.md` → group is `squads/dev-crew/output/2026-03-03-143022/slides/`
+   - Example: `squads/dev-crew/output/2026-03-03-143022/angles-brief.yaml` → group is `squads/dev-crew/output/2026-03-03-143022/`
 
 2. Detect existing versions for this group using Bash:
    ```bash
@@ -219,8 +219,8 @@ Apply to every path that was transformed in Step 1:
    (`{relative-group}` is the portion of the group path after `squads/{name}/output/{run_id}/`, e.g. `slides/` or empty string for root-level files)
 
 3. Insert the version folder immediately before the filename:
-   - `squads/carousel/output/2026-03-03-143022/slides/draft.md` → `squads/carousel/output/2026-03-03-143022/slides/v1/draft.md`
-   - `squads/carousel/output/2026-03-03-143022/angles-brief.yaml` → `squads/carousel/output/2026-03-03-143022/v1/angles-brief.yaml`
+   - `squads/dev-crew/output/2026-03-03-143022/slides/draft.md` → `squads/dev-crew/output/2026-03-03-143022/slides/v1/draft.md`
+   - `squads/dev-crew/output/2026-03-03-143022/angles-brief.yaml` → `squads/dev-crew/output/2026-03-03-143022/v1/angles-brief.yaml`
 
 4. **Cache per group**: within a single step execution, once a version is determined for a group, reuse it for all subsequent files in that same group. Do not re-run the `ls` per file.
    If the same file path is written twice within a step, both writes go to the same versioned path (the second write overwrites the first within that version).
@@ -308,20 +308,20 @@ Apply this transformation consistently for every write in this step.
 - **Update the dashboard FIRST — MANDATORY.** Before presenting anything, write `squads/{name}/state.json` with the squad `"status": "checkpoint"` and set the agent whose work is awaiting approval (the one that produced the artifact under review) to `"status": "checkpoint"`. Preserve everything else (desk positions, `startedAt`, `handoff`). This is what lights up the checkpoint panel in the Virtual Office — without it, the office shows the run as still "running" while it is actually blocked on you.
 - Present the checkpoint message to the user
 - If the checkpoint requires a choice (numbered list), present options as a numbered list
-- **Always include the file path** of any generated content the user needs to review. Example: "Review the content at `squads/{name}/output/{run_id}/v1/content.md` and let me know if it looks good."
+- **Always include the file path** of any the generated artifact the user needs to review. Example: "Review the content at `squads/{name}/output/{run_id}/v1/change.md` and let me know if it looks good."
 - Wait for user input before proceeding
 - Save the user's choice/response for the next step
 - **If the step frontmatter contains `outputFile`**: after collecting the user's full response,
   apply the Output Path Transformation **Step 1 only** (run_id injection — skip Step 2, version folder) to the `outputFile` path, then write the response to the transformed path using the Write tool before moving to the next step. Checkpoint files are user input captures, not versioned output — Step 2 does not apply here, regardless of the general "every write" rule in the Output Path Transformation section above.
   Use this format:
   ```
-  # Research Focus
+  # Intake
 
-  **Topic:** {user's typed topic}
-  **Time Range:** {selected time range label, e.g., "Últimos 7 dias"}
+  **Request:** {what the user wants done}
+  **Scope:** {bug fix | feature | refactor | cross-cutting}
   **Date:** {today's date in YYYY-MM-DD format}
   ```
-  This file is the `inputFile` for the researcher step that follows.
+  This file is the `inputFile` for the step that follows.
 
 ### Post-Step Output Validation
 

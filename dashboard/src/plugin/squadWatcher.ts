@@ -240,7 +240,20 @@ export function squadWatcherPlugin(): Plugin {
         }
       }
 
+      function handleDirAdd(dirPath: string) {
+        const rel = path.relative(squadsDir, dirPath).replace(/\\/g, "/");
+        // A brand-new top-level squad directory appeared. The squad.yaml file
+        // event can be missed for freshly-created deep dirs, so re-discover
+        // shortly after, giving squad.yaml time to finish writing.
+        if (rel && !rel.includes("/")) {
+          setTimeout(() => {
+            buildSnapshot(squadsDir, tracker).then((snap) => broadcast(wss, snap)).catch(() => {});
+          }, 600);
+        }
+      }
+
       watcher.on("add", handleFileChange);
+      watcher.on("addDir", handleDirAdd);
       watcher.on("change", handleFileChange);
       watcher.on("unlink", handleFileRemoval);
 

@@ -234,7 +234,19 @@ async function main() {
     }
   };
 
-  watcher.on("add", onChange).on("change", onChange).on("unlink", onRemove);
+  const onAddDir = (dirPath) => {
+    const rel = path.relative(squadsDir, dirPath).replace(/\\/g, "/");
+    // A brand-new top-level squad directory (no nested segment) appeared. The
+    // squad.yaml file event alone can be missed for freshly-created deep dirs, so
+    // re-discover shortly after, giving squad.yaml time to finish writing.
+    if (rel && !rel.includes("/")) {
+      setTimeout(() => {
+        buildSnapshot(squadsDir, tracker).then((snap) => broadcast(wss, snap)).catch(() => {});
+      }, 600);
+    }
+  };
+
+  watcher.on("add", onChange).on("addDir", onAddDir).on("change", onChange).on("unlink", onRemove);
 
   server.listen(PORT, () => {
     console.log(`\n  codesquad dashboard (live)  →  http://localhost:${PORT}`);
