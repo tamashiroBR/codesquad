@@ -1,7 +1,7 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-const MAX_RUNS = 20;
+const MAX_RUNS_PER_SQUAD = 20;
 
 export async function listRuns(squadName, targetDir = process.cwd()) {
   const squadsDir = join(targetDir, 'squads');
@@ -41,7 +41,9 @@ export async function listRuns(squadName, targetDir = process.cwd()) {
         if (state.startedAt && (state.completedAt || state.failedAt)) {
           const start = new Date(state.startedAt).getTime();
           const end = new Date(state.completedAt || state.failedAt).getTime();
-          run.duration = formatDuration(end - start);
+          if (Number.isFinite(start) && Number.isFinite(end)) {
+            run.duration = formatDuration(end - start);
+          }
         }
       } catch {
         // No state.json or malformed — keep defaults
@@ -51,12 +53,20 @@ export async function listRuns(squadName, targetDir = process.cwd()) {
     }
   }
 
-  runs.sort((a, b) => b.runId.localeCompare(a.runId));
-  return runs.slice(0, MAX_RUNS);
+  // Sort by squad, then newest run first, and cap PER SQUAD — a global sort would
+  // interleave squads (duplicating group headers in printRuns) and a global cap
+  // would silently drop an entire squad's runs behind a chatty neighbour.
+  runs.sort((a, b) => a.squad.localeCompare(b.squad) || b.runId.localeCompare(a.runId));
+  const perSquad = new Map();
+  return runs.filter((r) => {
+    const n = (perSquad.get(r.squad) || 0) + 1;
+    perSquad.set(r.squad, n);
+    return n <= MAX_RUNS_PER_SQUAD;
+  });
 }
 
 export function formatDuration(ms) {
-  if (ms <= 0) return '0s';
+  if (!Number.isFinite(ms) || ms <= 0) return '0s';
   const seconds = Math.floor(ms / 1000);
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);

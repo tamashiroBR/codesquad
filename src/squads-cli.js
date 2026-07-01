@@ -11,7 +11,7 @@ async function confirm(question) {
   return new Promise((resolve) => {
     rl.question(question, (answer) => {
       rl.close();
-      resolve(answer.trim().toLowerCase());
+      resolve(answer.trim().toLowerCase().charAt(0));
     });
   });
 }
@@ -107,7 +107,7 @@ async function runRemove(id, targetDir) {
   const installed = await listInstalled(targetDir);
   if (!installed.includes(id)) {
     console.log(`\n  ${t('squadsNotInstalled', { id })}\n`);
-    return;
+    return false;
   }
 
   const answer = await confirm(`\n  ${t('squadsConfirmRemove', { id })}`);

@@ -83,6 +83,9 @@ export async function installSquad(id, targetDir) {
     throw err;
   }
   const dest = join(targetDir, 'squads', id);
+  // Clean install: a reinstall must not merge over user edits or keep files the
+  // template no longer ships — that leaves an inconsistent hybrid squad behind.
+  await rm(dest, { recursive: true, force: true });
   await mkdir(dest, { recursive: true });
   await cp(src, dest, { recursive: true });
   metaCache.delete(id);

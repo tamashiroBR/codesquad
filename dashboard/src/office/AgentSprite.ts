@@ -15,11 +15,11 @@ const STATUS_COLORS: Record<AgentStatus, number> = {
   delivering: COLORS.statusWorking,
 };
 
-// Status → display label
+// Status → display label (done gets a check so completion reads instantly)
 const STATUS_LABELS: Record<AgentStatus, string> = {
   idle: 'idle',
   working: 'working',
-  done: 'done',
+  done: '\u2713 done',
   checkpoint: 'checkpoint',
   delivering: 'delivering',
 };
@@ -37,6 +37,9 @@ export class AgentSprite {
   private statusText: Phaser.GameObjects.Text;
   private statusGlow: Phaser.GameObjects.Graphics;
   private glowTween?: Phaser.Tweens.Tween;
+  private attentionBubble?: Phaser.GameObjects.Container;
+  private attentionTween?: Phaser.Tweens.Tween;
+  private attentionBaseY = 0;
   private animTimer?: Phaser.Time.TimerEvent;
   private agent: Agent;
   private characterName: CharacterName;
@@ -100,9 +103,8 @@ export class AgentSprite {
       .setOrigin(0.5, 1).setScale(1.4).setDepth(y + 3);
 
     // Shadow (unused graphics object kept for destroy() compatibility)
-    this.deskShadow = scene.add.graphics();
-    this.deskShadow.setDepth(y - 1);
     // Soft elliptical floor shadow under the workstation for grounding/depth
+    this.deskShadow = scene.add.graphics();
     this.deskShadow.fillStyle(0x000000, 0.16);
     this.deskShadow.fillEllipse(x, y + 30, 116, 26);
     this.deskShadow.setDepth(y - 2);
@@ -155,7 +157,62 @@ export class AgentSprite {
     this.drawLabelBackground(x, labelY);
     this.drawStatusDot(x, labelY + 22, agent.status);
 
+    // Checkpoint attention bubble — a bouncing "!" beside the badge that makes
+    // "this agent is waiting on YOU" readable from across the room.
+    this.buildAttentionBubble(x, labelY);
+    this.updateAttentionBubble(agent.status);
+
     this.startAnimation(agent.status);
+  }
+
+  private buildAttentionBubble(x: number, labelY: number): void {
+    const bubbleX = x;
+    const bubbleY = labelY - 22;
+
+    const bg = this.scene.add.graphics();
+    const color = STATUS_COLORS.checkpoint;
+    bg.fillStyle(color, 1);
+    bg.fillCircle(0, 0, 11);
+    bg.lineStyle(2, 0x1a1225, 0.9);
+    bg.strokeCircle(0, 0, 11);
+    // Tail pointing down at the badge
+    bg.fillStyle(color, 1);
+    bg.fillTriangle(-5, 8, 5, 8, 0, 16);
+
+    const mark = this.scene.add.text(0, 0, '!', {
+      fontFamily: '"Segoe UI", "Helvetica Neue", Arial, sans-serif',
+      fontSize: '15px',
+      fontStyle: 'bold',
+      color: '#1a1225',
+      resolution: 2,
+    }).setOrigin(0.5, 0.55);
+
+    this.attentionBubble = this.scene.add.container(bubbleX, bubbleY, [bg, mark]);
+    this.attentionBaseY = bubbleY;
+    this.attentionBubble.setDepth(902);
+    this.attentionBubble.setVisible(false);
+  }
+
+  private updateAttentionBubble(status: AgentStatus): void {
+    if (!this.attentionBubble) return;
+    this.attentionTween?.stop();
+    this.attentionTween = undefined;
+
+    if (status !== 'checkpoint') {
+      this.attentionBubble.setVisible(false);
+      return;
+    }
+
+    this.attentionBubble.setVisible(true);
+    this.attentionBubble.setY(this.attentionBaseY);
+    this.attentionTween = this.scene.tweens.add({
+      targets: this.attentionBubble,
+      y: { from: this.attentionBaseY, to: this.attentionBaseY - 7 },
+      duration: 450,
+      ease: 'Sine.easeInOut',
+      yoyo: true,
+      repeat: -1,
+    });
   }
 
   private getStatusHexColor(status: AgentStatus): string {
@@ -229,18 +286,59 @@ export class AgentSprite {
     this.avatar.setScale(this.avatarDisplayH / this.avatar.height);
   }
 
-  private startAnimation(_status: AgentStatus): void {
-    // Always run the working animation regardless of status
+  private startAnimation(status: AgentStatus): void {
+    // The animation IS the status readout — each state must look different at a glance:
+    //   idle       → still, occasional blink (calm, clearly not producing)
+    //   working    → talk/blink typing cycle (busy at the keyboard)
+    //   delivering → same typing cycle
+    //   checkpoint → waving at the viewer (wave1/wave2) — "I need your input"
+    //   done       → still, resting frame
     const keys = avatarKeys(this.characterName);
-    let frame = 0;
-    this.animTimer = this.scene.time.addEvent({
-      delay: 500,
-      loop: true,
-      callback: () => {
-        frame = (frame + 1) % 2;
-        this.setAvatarFrame(frame === 0 ? keys.talk : keys.blink);
-      },
-    });
+
+    if (status === 'checkpoint') {
+      this.setAvatarFrame(keys.wave1);
+      let frame = 0;
+      this.animTimer = this.scene.time.addEvent({
+        delay: 400,
+        loop: true,
+        callback: () => {
+          frame = (frame + 1) % 2;
+          this.setAvatarFrame(frame === 0 ? keys.wave1 : keys.wave2);
+        },
+      });
+      return;
+    }
+
+    if (status === 'working' || status === 'delivering') {
+      this.setAvatarFrame(keys.talk);
+      let frame = 0;
+      this.animTimer = this.scene.time.addEvent({
+        delay: 500,
+        loop: true,
+        callback: () => {
+          frame = (frame + 1) % 2;
+          this.setAvatarFrame(frame === 0 ? keys.talk : keys.blink);
+        },
+      });
+      return;
+    }
+
+    if (status === 'idle') {
+      // Mostly still; a brief blink every few seconds keeps the scene alive
+      this.setAvatarFrame(keys.talk);
+      this.animTimer = this.scene.time.addEvent({
+        delay: 3200,
+        loop: true,
+        callback: () => {
+          this.setAvatarFrame(keys.blink);
+          this.scene.time.delayedCall(180, () => this.setAvatarFrame(keys.talk));
+        },
+      });
+      return;
+    }
+
+    // done — resting, no timer
+    this.setAvatarFrame(keys.talk);
   }
 
   updateStatus(agent: Agent): void {
@@ -254,6 +352,7 @@ export class AgentSprite {
     this.startAnimation(agent.status);
 
     this.drawStatusGlow(agent.status);
+    this.updateAttentionBubble(agent.status);
 
     // Update status text and dot
     this.statusText.setText(STATUS_LABELS[agent.status]);
@@ -272,6 +371,8 @@ export class AgentSprite {
 
   destroy(): void {
     this.glowTween?.stop();
+    this.attentionTween?.stop();
+    this.attentionBubble?.destroy();
     this.animTimer?.destroy();
     this.statusGlow.destroy();
     this.deskTable.destroy();
